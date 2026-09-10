@@ -1,10 +1,12 @@
+export type UserRole = 'aluno' | 'professor' | 'admin';
+
 export interface User {
   id?: string;
   name: string;
   username: string;
   email: string;
   password?: string;
-  role: 'professor' | 'aluno' | 'admin';
+  role: UserRole;
 }
 
 export interface AuthContextData {

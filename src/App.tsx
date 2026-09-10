@@ -5,6 +5,7 @@ import { GlobalStyles } from './styles/GlobalStyles';
 import { Header } from './components/Header/Header';
 import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
+import { AppRoutes } from './routes/AppRoutes';
 
 export const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ export const App: React.FC = () => {
       <AuthProvider>
         <BrowserRouter>
           <Header/>
+          <AppRoutes/>
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
