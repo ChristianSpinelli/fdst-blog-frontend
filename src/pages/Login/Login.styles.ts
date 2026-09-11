@@ -31,13 +31,6 @@ export const Title = styled.h1`
   text-align: center;
 `;
 
-export const Subtitle = styled.p`
-  font-size: 0.875rem;
-  color: ${({ theme }) => theme.colors.textMuted};
-  margin-bottom: 2rem;
-  text-align: center;
-`;
-
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -48,6 +41,7 @@ export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
+  margin-bottom: 20px;
 `;
 
 export const Label = styled.label`

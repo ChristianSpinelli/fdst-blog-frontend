@@ -5,14 +5,20 @@ export interface User {
   name: string;
   username: string;
   email: string;
-  password?: string;
   role: UserRole;
 }
+
+
+export interface LoginCredentials {
+  username: string; 
+  password: string;
+}
+
 
 export interface AuthContextData {
   user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (userData: User) => void;
+  login: (loginCredentials: LoginCredentials) => void;
   logout: () => void;
 }

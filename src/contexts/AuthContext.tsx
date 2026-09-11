@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AuthContextData, User } from '../types/auth';
-
-const STORAGE_USER_KEY = '@BlogFiap:user';
+import { AuthContextData, LoginCredentials, User } from '../types/auth';
+import authService from '../services/authService';
+import { storageService } from '../services/storageService';
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
@@ -14,32 +14,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   // Carrega o usuário salvo no localStorage ao inicializar a aplicação
-  useEffect(() => {
-    const storedUser = localStorage.getItem(STORAGE_USER_KEY);
-
-    if (storedUser) {
-      try {
-        const parsedUser: User = JSON.parse(storedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Erro ao recarregar dados do usuário:', error);
-        localStorage.removeItem(STORAGE_USER_KEY);
-      }
-    }
-
-    setLoading(false);
+  useEffect(() => { 
+    const storageUser: User | null = storageService.getUser();
+    setUser(storageUser);
   }, []);
 
-  const login = (userData: User): void => {
-    // Garante que o objeto do usuário não carregue a senha no estado local por segurança
-    const { password, ...safeUser } = userData;
-
-    setUser(safeUser as User);
-    localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(safeUser));
+  const login = (credentials: LoginCredentials): Promise<void> => {
+    setLoading(true);
+    return authService.login(credentials).then((user:User)=>{
+      setUser(user);
+      setLoading(false);
+      storageService.setUser(user);
+    }).catch((error) => {
+      setLoading(false);
+      throw error;
+    })
   };
 
   const logout = (): void => {
-    localStorage.removeItem(STORAGE_USER_KEY);
+    storageService.removeUser();
     setUser(null);
   };
 

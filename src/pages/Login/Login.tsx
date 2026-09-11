@@ -1,20 +1,19 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React from 'react';
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useAuth } from '../../contexts/AuthContext';
+import { LoginCredentials } from '../../types/auth';
 import {
-    Card,
-    Container,
-    FormGroup,
-    Input,
-    Label,
-    ShowErrorMessage,
-    SubmitButton,
-    Subtitle,
-    Title
+  Card,
+  Container,
+  FormGroup,
+  Input,
+  Label,
+  ShowErrorMessage,
+  SubmitButton,
+  Title
 } from './Login.styles';
-import { UserRole } from '../../types/auth';
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -27,30 +26,43 @@ const loginSchema = Yup.object().shape({
 
 export const Login: React.FC = () => {
   const { login } = useAuth();
+  const [ globalError, setGlobalError ] = useState("");
   const navigate = useNavigate();
+  
+  const handleLoginSubmit = async (
+    values: LoginCredentials,
+    { setSubmitting }: FormikHelpers<LoginCredentials>
+  ) => {
+    const trimmedUsername = values.username.trim();
+    const trimmedPassword = values.password.trim();
+
+    try{
+      await login({
+        username: trimmedUsername,
+        password: trimmedPassword
+      });
+      navigate("/dashboard");
+    }catch(error){
+      setGlobalError("Não foi possível realizar o login, verifique suas credenciais e tente novamente.")
+      console.error("Erro ao logar ", error);
+    }
+    
+    setSubmitting(false);
+  };
 
   return (
     <Container>
       <Card>
-        <Title>Acesso de Usuário</Title>
-        <Subtitle>Entre com suas credenciais acessar a aplicação</Subtitle>
+        <Title>Entrar</Title>
+
+        {
+          !!globalError ? <ShowErrorMessage>{ globalError }</ShowErrorMessage> : <></>
+        }
 
         <Formik
           initialValues={{ username: '', password: '' }}
           validationSchema={loginSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            const trimmedUsername = values.username.trim();
-
-            login({
-              name: trimmedUsername,
-              username: trimmedUsername,
-              email: `${trimmedUsername}@techchallenge.com`,
-              role: 'aluno' as UserRole,
-            });
-
-            setSubmitting(false);
-            navigate('/dashboard');
-          }}
+          onSubmit={handleLoginSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
