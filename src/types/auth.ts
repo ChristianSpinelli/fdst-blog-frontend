@@ -8,7 +8,6 @@ export interface User {
   role: UserRole;
 }
 
-
 export interface LoginCredentials {
   username: string; 
   password: string;
