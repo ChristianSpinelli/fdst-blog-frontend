@@ -14,9 +14,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   // Carrega o usuário salvo no localStorage ao inicializar a aplicação
-  useEffect(() => { 
+ useEffect(() => { 
     const storageUser: User | null = storageService.getUser();
-    setUser(storageUser);
+    if (storageUser) {
+      setUser(storageUser);
+    }
+    setLoading(false);
   }, []);
 
   const login = (credentials: LoginCredentials): Promise<void> => {

@@ -2,7 +2,7 @@ import { Post, PostRequest } from '../types/post';
 import api from './api';
 
 export const postService = {
-    getAll: async (): Promise<Post[]> => {
+    getPosts: async (): Promise<Post[]> => {
         try{
             const response = await api.get<Post[]>('/posts');
             return response.data;
@@ -31,7 +31,7 @@ export const postService = {
 
     editPost: async (postRequest: PostRequest, id: number): Promise<Post> =>{
         try{
-            const response = await api.put<Post>(`/posts/${id}`);
+            const response = await api.put<Post>(`/posts/${id}`, postRequest);
             return response.data;
         }catch(error){
             throw error;

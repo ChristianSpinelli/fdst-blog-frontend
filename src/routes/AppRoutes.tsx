@@ -1,13 +1,39 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import { Login } from '../pages/Login/Login';
 import { ProtectedRoute } from './ProtectedRoute';
+import { Dashboard } from '../pages/Dashboard/Dashboard';
+import { UserRole } from '../types/auth';
+import { PostProvider } from '../contexts/PostContext';
+
+const PostLayout: React.FC = () => {
+  return (
+    <PostProvider>
+      <Outlet />
+    </PostProvider>
+  );
+};
 
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-        <Route path='/' element={<ProtectedRoute />}/>
-        <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<h1>Página não encontrada (404)</h1>} />
+
+      <Route 
+        element={
+        <ProtectedRoute 
+          allowedRoles={[UserRole.ALUNO, UserRole.PROFESSOR]} 
+          navigateTo='/dashboard'
+        />
+      }>
+        <Route element={<PostLayout/>}>
+           <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+      </Route>
+    
+
+      
     </Routes>
   );
 };

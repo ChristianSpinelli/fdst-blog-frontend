@@ -1,4 +1,10 @@
-export type UserRole = 'aluno' | 'professor' | 'admin';
+export const UserRole = {
+  ALUNO: 'aluno',
+  PROFESSOR: 'professor',
+  ADMIN: 'admin',
+} as const;
+
+export type UserRole = typeof UserRole[keyof typeof UserRole];
 
 export interface User {
   id?: string;

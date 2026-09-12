@@ -1,9 +1,11 @@
+import { User } from "./auth";
+
 export interface Post {
     id:number;
     title:string;
     body:string;
     description:string;
-    author:string;
+    author:User;
 }
 
 export interface PostRequest {
