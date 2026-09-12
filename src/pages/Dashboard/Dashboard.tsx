@@ -1,4 +1,3 @@
-// src/pages/Dashboard/Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { usePosts } from '../../contexts/PostContext';
 import {
@@ -23,11 +22,13 @@ export const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      searchPosts(searchTerm);
-    }, 400);
+    if(searchTerm){
+      const timer = setTimeout(() => {
+          searchPosts(searchTerm);
+      }, 400);
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, [searchTerm]);
 
   return (
