@@ -5,6 +5,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { Dashboard } from '../pages/Dashboard/Dashboard';
 import { UserRole } from '../types/auth';
 import { PostProvider } from '../contexts/PostContext';
+import { PostDetail } from '../pages/PostDetail/PostDetail';
 
 const PostLayout: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ export const AppRoutes: React.FC = () => {
       }>
         <Route element={<PostLayout/>}>
            <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/posts/:id" element={<PostDetail />} />
         </Route>
       </Route>
     

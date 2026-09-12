@@ -10,6 +10,7 @@ interface PostContextType {
   createPost: (data: PostRequest) => Promise<void>;
   deletePost: (id: number) => Promise<void>;
   searchPosts: (query:string) => Promise<void>;
+  getPostById: (id: number) => Promise<Post>;
 }
 
 const PostContext = createContext<PostContextType | undefined>(undefined);
@@ -70,6 +71,14 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const getPostById = async (id: number): Promise<Post> => {
+    try {
+      return await postService.getPostById(id);
+    } catch (error) {
+      throw new Error('Não foi possível carregar o artigo.');
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -83,7 +92,8 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         fetchPosts,
         createPost,
         deletePost,
-        searchPosts
+        searchPosts,
+        getPostById
       }}
     >
       {children}

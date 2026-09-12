@@ -16,10 +16,13 @@ import {
   EmptyState,
   LoadingMessage,
 } from './Dashboard.styles';
+import { useNavigate } from 'react-router-dom';
 
 export const Dashboard: React.FC = () => {
   const { posts, isLoading, errorMessage, searchPosts } = usePosts();
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     if(searchTerm){
@@ -62,7 +65,7 @@ export const Dashboard: React.FC = () => {
       ) : (
         <PostGrid>
           {posts.map((post) => (
-            <PostCard key={post.id}>
+            <PostCard key={post.id} onClick={() => navigate(`/posts/${post.id}`)} style={{ cursor: 'pointer' }}>
               <PostHeader>
                 <PostTitle>{post.title || 'Sem título'}</PostTitle>
                 <PostDescription>{post.description}</PostDescription>

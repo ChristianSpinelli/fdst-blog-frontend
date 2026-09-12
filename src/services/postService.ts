@@ -53,7 +53,7 @@ export const postService = {
                 params: { search }
             });
             
-            return response.data; // Retorna a lista de posts filtrada
+            return response.data;
         } catch (error) {
             throw error;
         }
