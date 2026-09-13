@@ -11,6 +11,7 @@ import {
   UserBadge,
   Button,
 } from './Header.styles';
+import { UserRole } from '../../types/auth';
 
 export const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -18,17 +19,17 @@ export const Header: React.FC = () => {
   return (
     <HeaderContainer>
       <HeaderContent>
-        <Logo to="/">
+        <Logo to="/dashboard">
           Blog<span>FIAP</span>
         </Logo>
 
         <Nav>
           {isAuthenticated ? (
             <>
-                <NavLink to="/">Posts</NavLink>
+                <NavLink to="/dashboard">Mural de Postagens</NavLink>
                 <UserSection>
-                    <NavLink to="/admin">Painel Admin</NavLink>
-                    <UserBadge>Prof. {user?.name || 'Docente'}</UserBadge>
+                    { user?.role === UserRole.PROFESSOR ? <NavLink to="/admin/posts">Painel Administrativo</NavLink> : <></> }
+                    <UserBadge>{user?.username || "Desconhecido"}</UserBadge>
                     <Button $variant="outline" onClick={logout}>
                         Sair
                     </Button>
