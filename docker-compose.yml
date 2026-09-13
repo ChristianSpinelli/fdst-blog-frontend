@@ -1,0 +1,7 @@
+services:
+  frontend:
+    image: cspin93/blog-fiap-frontend:latest
+    container_name: blog-frontend
+    ports:
+      - "5173:5173"
+    restart: always
