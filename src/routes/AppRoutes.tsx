@@ -31,6 +31,7 @@ export const AppRoutes: React.FC = () => {
         <Route element={<PostLayout/>}>          
            <Route path="/dashboard" element={<Dashboard />} />
            <Route path="/posts/:id" element={<PostDetail />} />
+           <Route path="/login"  element={<Navigate to="/dashboard"/>}/>
            <Route path="*"  element={<Navigate to="/dashboard"/>}/>
         </Route>
       </Route>
@@ -45,6 +46,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="/admin/posts" element={<AdminPosts />} />
             <Route path="/admin/posts/new" element={<CreateOrEditPost isEditing={false} />} />
             <Route path='/admin/posts/edit/:id' element={<CreateOrEditPost isEditing={true}/> } />
+            <Route path="/login"  element={<Navigate to="/dashboard"/>}/>
             <Route path="*"  element={<Navigate to="/dashboard"/>}/>
         </Route>
       </Route>

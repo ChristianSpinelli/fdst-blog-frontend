@@ -197,7 +197,7 @@ export const CreateOrEditPost: React.FC<CreateOrEditProps> = ({ isEditing }) => 
             </FormGroup>
 
             <SubmitButton type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Salvando...' : 'Publicar Postagem'}
+              {isSubmitting ? 'Salvando...' :  (isEditing ? 'Atualizar Postagem' : 'Publicar Postagem')}
             </SubmitButton>
           </Form>
         )}

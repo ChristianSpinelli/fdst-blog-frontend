@@ -72,7 +72,7 @@ export const Dashboard: React.FC = () => {
             <PostCard key={post.id} onClick={() => navigate(`/posts/${post.id}`)} style={{ cursor: 'pointer' }}>
               <PostHeader>
                 <PostTitle>{post.title || 'Sem título'}</PostTitle>
-                <PostDescription>{post.description}</PostDescription>
+                <PostDescription title={post.description}>{post.description}</PostDescription>
               </PostHeader>
 
               <PostFooter>
@@ -80,7 +80,6 @@ export const Dashboard: React.FC = () => {
                   <span className="name">
                     {post.author?.name || 'Autor desconhecido'}
                   </span>
-                  {post.author?.role && <span className="role">{post.author.role}</span>}
                 </AuthorInfo>
               </PostFooter>
             </PostCard>
