@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePosts } from '../../contexts/PostContext';
 import {
   Container,
@@ -23,15 +23,19 @@ export const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    if(searchTerm){
-      const timer = setTimeout(() => {
-          searchPosts(searchTerm);
-      }, 400);
-
-      return () => clearTimeout(timer);
+    if(isFirstRender.current){
+      isFirstRender.current = false;
+      return;
     }
+
+    const timer = setTimeout(() => {
+        searchPosts(searchTerm);
+    }, 400);
+
+    return () => clearTimeout(timer);
   }, [searchTerm]);
 
   return (

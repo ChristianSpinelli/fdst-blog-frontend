@@ -7,6 +7,7 @@ import { UserRole } from '../types/auth';
 import { PostProvider } from '../contexts/PostContext';
 import { PostDetail } from '../pages/PostDetail/PostDetail';
 import { AdminPosts } from '../pages/AdminPost/AdminPost';
+import { CreatePost } from '../pages/CreatePost/CreatePost';
 
 const PostLayout: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ export const AppRoutes: React.FC = () => {
       }>
         <Route element={<PostLayout/>}>
             <Route path="/admin/posts" element={<AdminPosts />} />
+             <Route path="/admin/posts/new" element={<CreatePost />} />
             <Route path="*"  element={<Navigate to="/dashboard"/>}/>
         </Route>
       </Route>

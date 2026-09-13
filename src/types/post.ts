@@ -9,8 +9,7 @@ export interface Post {
 }
 
 export interface PostRequest {
-    title?:string;
-    body?:string;
-    description?:string;
-    author?:string;
+    title:string;
+    body:string;
+    description:string;
 }
