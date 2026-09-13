@@ -14,11 +14,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install -g serve
 
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 5173
 
-CMD ["npm", "run", "start"]
+CMD ["serve", "-s", "dist", "-l", "5173"]
