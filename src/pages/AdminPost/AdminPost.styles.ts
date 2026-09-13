@@ -55,13 +55,17 @@ export const TableContainer = styled.div`
   border-radius: ${({ theme }) => theme.radii.large};
   overflow-x: auto;
   box-shadow: ${({ theme }) => theme.shadows.small};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: none;
+  }
 `;
 
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  table-layout: fixed; /* Essencial para respeitar as larguras das colunas */
+  table-layout: fixed;
 
   th, td {
     padding: 1rem 1.25rem;
@@ -70,11 +74,10 @@ export const Table = styled.table`
     white-space: nowrap;
   }
 
-  /* Definição precisa de largura para cada coluna */
-  th:nth-child(1), td:nth-child(1) { width: 22%; } /* Título */
-  th:nth-child(2), td:nth-child(2) { width: 43%; } /* Descrição */
-  th:nth-child(3), td:nth-child(3) { width: 20%; } /* Autor */
-  th:nth-child(4), td:nth-child(4) { width: 15%; text-align: right; } /* Ações */
+  th:nth-child(1), td:nth-child(1) { width: 22%; }
+  th:nth-child(2), td:nth-child(2) { width: 43%; }
+  th:nth-child(3), td:nth-child(3) { width: 20%; }
+  th:nth-child(4), td:nth-child(4) { width: 15%; text-align: right; }
 
   th {
     background-color: ${({ theme }) => theme.colors.surfaceAlt};
@@ -99,7 +102,6 @@ export const Table = styled.table`
   }
 `;
 
-/* Componente único padronizado para todas as colunas de texto */
 export const PostTextCell = styled.span`
   display: block;
   overflow: hidden;
@@ -148,6 +150,67 @@ export const DeleteButton = styled.button`
     background-color: ${({ theme }) => theme.colors.danger};
     color: #ffffff;
     border-color: ${({ theme }) => theme.colors.danger};
+  }
+`;
+
+export const MobileCardContainer = styled.div`
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+  }
+`;
+
+export const AdminCard = styled.div`
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.large};
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: ${({ theme }) => theme.shadows.small};
+`;
+
+export const CardInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.textPrimary};
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: ${({ theme }) => theme.colors.textMuted};
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  span {
+    font-size: 0.85rem;
+    color: ${({ theme }) => theme.colors.primary};
+    font-weight: 500;
+  }
+`;
+
+export const CardActions = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+
+  button {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
   }
 `;
 
