@@ -1,10 +1,10 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePosts } from '../../contexts/PostContext';
-import { PostRequest } from '../../types/post';
+import { Post, PostRequest } from '../../types/post';
 import {
   BackButton,
   CharCount,
@@ -14,12 +14,17 @@ import {
   FormGroup,
   FormHeader,
   SubmitButton,
-} from './CreatePost.styles';
+} from './CreateOrEditPost.styles';
+import { LoadingMessage } from '../Dashboard/Dashboard.styles';
 
 interface PostFormValues {
   title: string;
   description: string;
   content: string;
+}
+
+interface CreateOrEditProps{
+  isEditing:boolean;
 }
 
 const validationSchema = Yup.object({
@@ -34,11 +39,17 @@ const validationSchema = Yup.object({
     .max(10000, 'O conteúdo deve ter no máximo 10000 caracteres.'),
 });
 
-export const CreatePost: React.FC = () => {
+export const CreateOrEditPost: React.FC<CreateOrEditProps> = ({ isEditing }) => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { createPost } = usePosts();
+  const { createPost, updatePost, getPostById, isLoading } = usePosts();
   const { user } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [initialValues, setInitialValues] = useState<PostFormValues>({
+      title: '',
+      description: '',
+      content: '',
+  });
 
   const handleSubmit = async (
     values: PostFormValues,
@@ -67,13 +78,60 @@ export const CreatePost: React.FC = () => {
     }
   };
 
+  const handleSubmitEditing = async (
+    values: PostFormValues,
+    { setSubmitting }: FormikHelpers<PostFormValues>
+  ) => {
+    try {
+      setServerError(null);
+      if (!id) return;
+
+      const updatedData = {
+        title: values.title,
+        description: values.description,
+        body: values.content,
+      };
+
+      await updatePost(updatedData, Number(id));
+      navigate('/admin/posts');
+    } catch (error) {
+      setServerError('Não foi possível atualizar a postagem. Tente novamente.');
+      setSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getPostById(Number(id)).then((post:Post) =>{
+        setInitialValues({
+          title: post.title || '',
+          description: post.description || '',
+          content: post.body || '',
+        });
+      }).catch(() =>{
+        setServerError('Postagem não encontrada.');
+      })
+    }
+  }, [id]);
+
+  if (isLoading) {
+      return (
+        <Container>
+          <LoadingMessage>Carregando dados da postagem...</LoadingMessage>
+        </Container>
+      );
+    }
+
   return (
     <Container>
       <BackButton onClick={() => navigate('/admin/posts')}>← Voltar ao Painel</BackButton>
 
       <FormHeader>
-        <h1>Criar Nova Postagem</h1>
-        <p>Preencha os campos abaixo para publicar um novo artigo no blog acadêmico.</p>
+        <h1>{!isEditing ? 'Criar Nova Postagem' : 'Editar Postagem'}</h1>
+        <p>{!isEditing ? 
+          'Preencha os campos abaixo para publicar um novo artigo no blog acadêmico': 
+          'Atualize os campos abaixo para modificar o artigo no blog acadêmico'  
+        }.</p>
       </FormHeader>
 
       {serverError && (
@@ -83,9 +141,10 @@ export const CreatePost: React.FC = () => {
       )}
 
       <Formik
-        initialValues={{ title: '', description: '', content: '' }}
+        initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={!isEditing ? handleSubmit : handleSubmitEditing}
+        enableReinitialize={true}
       >
         {({ values, isSubmitting }) => (
           <Form>

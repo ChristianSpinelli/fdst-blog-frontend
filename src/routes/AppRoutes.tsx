@@ -7,7 +7,7 @@ import { UserRole } from '../types/auth';
 import { PostProvider } from '../contexts/PostContext';
 import { PostDetail } from '../pages/PostDetail/PostDetail';
 import { AdminPosts } from '../pages/AdminPost/AdminPost';
-import { CreatePost } from '../pages/CreatePost/CreatePost';
+import { CreateOrEditPost } from '../pages/CreateOrEditPost/CreateOrEditPost';
 
 const PostLayout: React.FC = () => {
   return (
@@ -43,7 +43,8 @@ export const AppRoutes: React.FC = () => {
       }>
         <Route element={<PostLayout/>}>
             <Route path="/admin/posts" element={<AdminPosts />} />
-             <Route path="/admin/posts/new" element={<CreatePost />} />
+            <Route path="/admin/posts/new" element={<CreateOrEditPost isEditing={false} />} />
+            <Route path='/admin/posts/edit/:id' element={<CreateOrEditPost isEditing={true}/> } />
             <Route path="*"  element={<Navigate to="/dashboard"/>}/>
         </Route>
       </Route>

@@ -11,6 +11,7 @@ interface PostContextType {
   deletePost: (id: number) => Promise<void>;
   searchPosts: (query:string) => Promise<void>;
   getPostById: (id: number) => Promise<Post>;
+  updatePost: (post: PostRequest, id:number) => Promise<Post>;
 }
 
 const PostContext = createContext<PostContextType | undefined>(undefined);
@@ -79,6 +80,18 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const updatePost = async (post:PostRequest, id:number) => {
+    try{
+      const response: Post = await postService.editPost(post, id);
+      setPosts((prevPosts) =>
+        prevPosts.map((p) => (Number(p.id) === Number(id) ? response : p))
+      );
+      return response;      
+    }catch(error){
+      throw new Error("Não foi possível atualizar o Post");
+    }
+  }
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -93,7 +106,8 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         createPost,
         deletePost,
         searchPosts,
-        getPostById
+        getPostById,
+        updatePost
       }}
     >
       {children}
