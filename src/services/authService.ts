@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import api from './api';
 import { LoginCredentials, User } from '../types/auth';
 
